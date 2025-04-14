@@ -26,7 +26,7 @@ struct EditorView: View {
             }
             else {
                 List {
-                    ForEach(viewModel.items) { item in
+                    ForEach($viewModel.items) { $item in
                         Button(action: {
                             appCoordinator.push(.detail(item: $item))
                         }) {
