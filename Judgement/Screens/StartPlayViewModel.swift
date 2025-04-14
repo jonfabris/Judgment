@@ -9,7 +9,7 @@ import SwiftUI
 import Combine
 import SwiftData
 
-class IntroPlayViewModel: ObservableObject
+class StartPlayViewModel: ObservableObject
 {
     @Published var introText: String = ""
     

@@ -8,8 +8,8 @@
 import SwiftUI
 import SwiftData
 
-struct IntroPlayView: View {
-    @ObservedObject var viewModel: IntroPlayViewModel
+struct StartPlayView: View {
+    @ObservedObject var viewModel: StartPlayViewModel
     @EnvironmentObject var appCoordinator: AppCoordinator
     @State var speedValue: Float = 50
 
@@ -51,5 +51,5 @@ struct IntroPlayView: View {
 }
 
 #Preview {
-    IntroPlayView(viewModel: IntroPlayViewModel())
+    StartPlayView(viewModel: StartPlayViewModel())
 }

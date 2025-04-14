@@ -32,5 +32,15 @@ class EditorViewModel: ObservableObject
             loading = false
         }
     }
+    
+    func deleteItem(_ item: ChoiceItem) {
+        Task { @MainActor in
+            do {
+                _ = try await CloudKitHelper.instance.deleteItem(item: item)
+            } catch {
+                print(error.localizedDescription)
+            }
+        }
+    }
 }
 

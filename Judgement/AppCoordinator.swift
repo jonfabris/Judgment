@@ -96,7 +96,7 @@ class AppCoordinator: ObservableObject {
         case .detail(let item, let needsRefresh):
             EditItemView(item: item, needsRefresh: needsRefresh)
         case .introPlay:
-            IntroPlayView(viewModel: IntroPlayViewModel())
+            StartPlayView(viewModel: StartPlayViewModel())
         case .play(let speed):
             PlayView(viewModel: PlayViewModel(speed: speed))
         }

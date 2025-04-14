@@ -9,14 +9,9 @@ import SwiftUI
 
 struct EditItemView: View {
     @EnvironmentObject var appCoordinator: AppCoordinator
-    @State var item: ChoiceItem
+    @ObservedObject var item: ChoiceItem
     @Binding var needsRefresh: Bool
-    var viewModel: EditItemViewModel = EditItemViewModel()
-    
-//    init(item: ChoiceItem) {
-//        self.item = item
-////        self.needsRefresh = needsRefresh
-//    }
+    @ObservedObject var viewModel: EditItemViewModel = EditItemViewModel()
         
     var body: some View {
         VStack {

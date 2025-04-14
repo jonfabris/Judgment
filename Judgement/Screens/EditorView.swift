@@ -36,9 +36,6 @@ struct EditorView: View {
             
         }
         .toolbar {
-            ToolbarItem(placement: .navigationBarTrailing) {
-                EditButton()
-            }
             ToolbarItem {
                 Button(action: addItem) {
                     Label("Add Item", systemImage: "plus")
@@ -69,7 +66,7 @@ struct EditorView: View {
     private func deleteItems(offsets: IndexSet) {
         withAnimation {
             for index in offsets {
-//                modelContext.delete(items[index])
+                viewModel.deleteItem(viewModel.items[index])
             }
         }
     }

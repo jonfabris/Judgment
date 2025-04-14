@@ -42,7 +42,15 @@ struct IntroView: View {
                 .foregroundColor(Color.white)
             }
         }
+        .alert("Error", isPresented: $viewModel.showAlert) {
+            Button("OK", role: .cancel) { }
+        } message: {
+            Text(viewModel.alertMessage)
+        }
         .frame(width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height)
+        .onAppear {
+            viewModel.setup()
+        }
     }
 }
 
