@@ -18,23 +18,24 @@ struct EditorView: View {
     
     var body: some View {
         VStack {
-            if(viewModel.items.isEmpty && !viewModel.loading) {
-                Text("No items")
+            if(viewModel.loading){
+                ProgressView().opacity(1)
             }
-            ProgressView().opacity(viewModel.loading ? 1 : 0)
-            List {
-                ForEach(viewModel.items) { item in
-                    Button(action: {
-                        newItem = item
-                        appCoordinator.push(.detail(item: item))
-                                            //, needsRefresh: $needsRefresh))
-                    }) {
-                        Text("\(item.question)")
+            else if(viewModel.items.isEmpty) {
+                Text("No items \(viewModel.items.count)")
+            }
+            else {
+                List {
+                    ForEach(viewModel.items) { item in
+                        Button(action: {
+                            appCoordinator.push(.detail(item: $item))
+                        }) {
+                            Text("\(item.question)")
+                        }
                     }
+                    .onDelete(perform: deleteItems)
                 }
-                .onDelete(perform: deleteItems)
             }
-            
         }
         .toolbar {
             ToolbarItem {
@@ -46,9 +47,14 @@ struct EditorView: View {
         .onAppear {
             viewModel.loadQuestions()
         }
-        .onChange(of: appCoordinator.path) { oldValue, newValue in
-            
-        }
+//        .onChange(of: scenePhase) { newPhase in
+//            if newPhase == .active {
+//                loadItems()
+//            }
+//        }
+//        .onChange(of: appCoordinator.path) { oldValue, newValue in
+//            
+//        }
         .alert("Alert Title", isPresented: $viewModel.showAlert) {
             Button("OK", role: .cancel) { }
         } message: {
@@ -60,8 +66,7 @@ struct EditorView: View {
         withAnimation {
             let newItem = ChoiceItem(question: "question", choiceA: "choice A", choiceB: "choice B", explanation: "explanation", category: "category")
             CloudKitHelper.instance.saveNewItem(item: newItem)
-            appCoordinator.push(.detail(item: newItem))
-                                //, needsRefresh: $needsRefresh))
+            appCoordinator.push(.detail(item: $newItem))
         }
     }
 

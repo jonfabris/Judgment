@@ -24,8 +24,8 @@ class EditorViewModel: ObservableObject
         print("LoadQuestions\n\n")
         Task { @MainActor in
             do {
-                loading = false
                 items = try await CloudKitHelper.instance.fetchItems()
+                loading = false
                 print("num items \(items.count)")
             } catch {
                 showAlert = true

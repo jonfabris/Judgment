@@ -13,7 +13,7 @@ import SwiftUI
 enum Screen: Identifiable, Hashable {
     case intro
     case editor
-    case detail(item: ChoiceItem) // needsRefresh: Binding<Bool>)
+    case detail(item: Binding<ChoiceItem>) // needsRefresh: Binding<Bool>)
     case introPlay
     case play(speed: Float)
     
@@ -26,8 +26,8 @@ enum Screen: Identifiable, Hashable {
             return true
         case (.play(_), .play(_)):
             return true
-        case (.detail(let lhsItem), .detail(let rhsItem)):
-            return lhsItem == rhsItem
+        case (.detail(_), .detail(_)):
+            return true
         default:
             return false
         }
@@ -46,7 +46,7 @@ enum Screen: Identifiable, Hashable {
             hasher.combine(speed)
         case .detail(let item): //, _):
             hasher.combine(4)
-            hasher.combine(item)
+//            hasher.combine(item)
         }
     }
 }
@@ -69,6 +69,10 @@ class AppCoordinator: ObservableObject {
     @Published var path: NavigationPath = NavigationPath()
     @Environment(\.modelContext) private var modelContext
     
+    lazy var editorViewModel = EditorViewModel()
+    lazy var introViewModel = IntroViewModel()
+    lazy var startPlayViewModel = StartPlayViewModel()
+    
     var screenStack: [Screen] = []
 
     func push(_ screen: Screen) {
@@ -90,11 +94,11 @@ class AppCoordinator: ObservableObject {
     func build(_ screen: Screen) -> some View {
         switch screen {
         case .intro:
-            IntroView(viewModel: IntroViewModel())
+            IntroView(viewModel: introViewModel)
         case .editor:
-            EditorView(viewModel: EditorViewModel())
-        case .detail(let item): //, let needsRefresh):
-            EditItemView(item: item) //, needsRefresh: needsRefresh)
+            EditorView(viewModel: editorViewModel)
+        case .detail(let item):
+            EditItemView(item: item)
         case .introPlay:
             StartPlayView(viewModel: StartPlayViewModel())
         case .play(let speed):
