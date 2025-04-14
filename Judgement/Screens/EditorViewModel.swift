@@ -24,12 +24,15 @@ class EditorViewModel: ObservableObject
         print("LoadQuestions\n\n")
         Task { @MainActor in
             do {
+                loading = false
                 items = try await CloudKitHelper.instance.fetchItems()
+                print("num items \(items.count)")
             } catch {
                 showAlert = true
+                loading = false
                 alertMessage = error.localizedDescription
             }
-            loading = false
+            
         }
     }
     

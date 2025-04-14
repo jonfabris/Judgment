@@ -12,7 +12,7 @@ struct EditorView: View {
     @EnvironmentObject var appCoordinator: AppCoordinator
     @ObservedObject var viewModel: EditorViewModel
     @State private var refreshID = UUID()
-    @State private var needsRefresh = false
+//    @State private var needsRefresh = false
     
     @State var newItem: ChoiceItem = ChoiceItem()
     
@@ -26,7 +26,8 @@ struct EditorView: View {
                 ForEach(viewModel.items) { item in
                     Button(action: {
                         newItem = item
-                        appCoordinator.push(.detail(item: item, needsRefresh: $needsRefresh))
+                        appCoordinator.push(.detail(item: item))
+                                            //, needsRefresh: $needsRefresh))
                     }) {
                         Text("\(item.question)")
                     }
@@ -59,7 +60,8 @@ struct EditorView: View {
         withAnimation {
             let newItem = ChoiceItem(question: "question", choiceA: "choice A", choiceB: "choice B", explanation: "explanation", category: "category")
             CloudKitHelper.instance.saveNewItem(item: newItem)
-            appCoordinator.push(.detail(item: newItem, needsRefresh: $needsRefresh))
+            appCoordinator.push(.detail(item: newItem))
+                                //, needsRefresh: $needsRefresh))
         }
     }
 

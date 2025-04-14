@@ -13,7 +13,7 @@ import SwiftUI
 enum Screen: Identifiable, Hashable {
     case intro
     case editor
-    case detail(item: ChoiceItem, needsRefresh: Binding<Bool>)
+    case detail(item: ChoiceItem) // needsRefresh: Binding<Bool>)
     case introPlay
     case play(speed: Float)
     
@@ -26,7 +26,7 @@ enum Screen: Identifiable, Hashable {
             return true
         case (.play(_), .play(_)):
             return true
-        case (.detail(let lhsItem, _), .detail(let rhsItem, _)):
+        case (.detail(let lhsItem), .detail(let rhsItem)):
             return lhsItem == rhsItem
         default:
             return false
@@ -44,7 +44,7 @@ enum Screen: Identifiable, Hashable {
         case .play(let speed):
             hasher.combine(3)
             hasher.combine(speed)
-        case .detail(let item, _):
+        case .detail(let item): //, _):
             hasher.combine(4)
             hasher.combine(item)
         }
@@ -93,8 +93,8 @@ class AppCoordinator: ObservableObject {
             IntroView(viewModel: IntroViewModel())
         case .editor:
             EditorView(viewModel: EditorViewModel())
-        case .detail(let item, let needsRefresh):
-            EditItemView(item: item, needsRefresh: needsRefresh)
+        case .detail(let item): //, let needsRefresh):
+            EditItemView(item: item) //, needsRefresh: needsRefresh)
         case .introPlay:
             StartPlayView(viewModel: StartPlayViewModel())
         case .play(let speed):

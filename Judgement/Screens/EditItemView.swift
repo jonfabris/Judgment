@@ -10,7 +10,7 @@ import SwiftUI
 struct EditItemView: View {
     @EnvironmentObject var appCoordinator: AppCoordinator
     @ObservedObject var item: ChoiceItem
-    @Binding var needsRefresh: Bool
+//    @Binding var needsRefresh: Bool
     @ObservedObject var viewModel: EditItemViewModel = EditItemViewModel()
         
     var body: some View {
@@ -32,7 +32,7 @@ struct EditItemView: View {
                 .withDefaultTextEditStyle()
                 .frame(height: 38)
             Button(action: {
-                needsRefresh = true
+//                needsRefresh = true
                 viewModel.save(item: item)
                 appCoordinator.pop()
             }) {
