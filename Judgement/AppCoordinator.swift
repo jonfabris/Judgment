@@ -16,7 +16,7 @@ enum Screen: Identifiable, Hashable {
     case detail(item: Binding<ChoiceItem>) // needsRefresh: Binding<Bool>)
     case introPlay
     case play(speed: Float)
-    
+
     var id: Self { return self }
     
     // Explicitly conform to Equatable
@@ -46,7 +46,7 @@ enum Screen: Identifiable, Hashable {
             hasher.combine(speed)
         case .detail(let item): //, _):
             hasher.combine(4)
-//            hasher.combine(item)
+            //            hasher.combine(item)
         }
     }
 }
@@ -66,8 +66,11 @@ struct CoordinatorView: View {
 }
 
 class AppCoordinator: ObservableObject {
+//    @State var wiki: Wiki = Wiki()
+    @State var choices: [ChoiceItem] = [ChoiceItem(question: "question", choiceA: "choice A", choiceB: "choice B", explanation: "explanation", category: "category")]
+    
     @Published var path: NavigationPath = NavigationPath()
-    @Environment(\.modelContext) private var modelContext
+//    @Environment(\.modelContext) private var modelContext
     
     lazy var editorViewModel = EditorViewModel()
     lazy var introViewModel = IntroViewModel()
@@ -96,7 +99,7 @@ class AppCoordinator: ObservableObject {
         case .intro:
             IntroView(viewModel: introViewModel)
         case .editor:
-            EditorView(viewModel: editorViewModel)
+            EditorView(viewModel: editorViewModel, wiki: $choices)
         case .detail(let item):
             EditItemView(item: item)
         case .introPlay:

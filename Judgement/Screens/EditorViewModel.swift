@@ -45,5 +45,20 @@ class EditorViewModel: ObservableObject
             }
         }
     }
+    
+//    func bindingForId(id: Int) -> Binding<ChoiceItem> {
+//        .init { () -> ChoiceItem in
+//            self.items.first(where: { $0.id == id }) ?? ChoiceItem(id: -1, name: "()")
+//        } set: { (newValue) in
+//            self.items = self.items.map {
+//                if $0.id == id {
+//                    return newValue
+//                } else {
+//                    return $0
+//                }
+//            }
+//        }
+//
+//    }
 }
 

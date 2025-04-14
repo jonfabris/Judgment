@@ -13,6 +13,7 @@ import CloudKitCodable
 
 //@Model - only needed for SwiftData
 class ChoiceItem: CustomCloudKitCodable, Hashable, Identifiable, ObservableObject {
+    var id: UUID = UUID()
     var cloudKitSystemFields: Data?
     @Published var question: String = ""
     var correct: String = ""

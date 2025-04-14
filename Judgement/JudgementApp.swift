@@ -24,11 +24,18 @@ struct JudgementApp: App {
 //        }
 //    }()
 
-    var body: some Scene {
-        WindowGroup {
-            CoordinatorView()
+//    var body: some Scene {
+//        WindowGroup {
+//            CoordinatorView()
+//        }
+////        .modelContainer(sharedModelContainer)
+//    }
+    
+    
+        var body: some Scene {
+            WindowGroup {
+                CoordinatorView()
+            }
         }
-//        .modelContainer(sharedModelContainer)
-    }
 }
 

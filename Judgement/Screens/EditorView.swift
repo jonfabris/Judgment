@@ -11,8 +11,8 @@ import SwiftData
 struct EditorView: View {
     @EnvironmentObject var appCoordinator: AppCoordinator
     @ObservedObject var viewModel: EditorViewModel
-    @State private var refreshID = UUID()
-//    @State private var needsRefresh = false
+    
+    @Binding var wiki: [ChoiceItem]
     
     @State var newItem: ChoiceItem = ChoiceItem()
     
@@ -26,7 +26,7 @@ struct EditorView: View {
             }
             else {
                 List {
-                    ForEach($viewModel.items) { $item in
+                    ForEach($wiki) { $item in
                         Button(action: {
                             appCoordinator.push(.detail(item: $item))
                         }) {
@@ -80,9 +80,9 @@ struct EditorView: View {
 
 }
 
-#Preview {
-    EditorView(viewModel: EditorViewModel())
-}
+//#Preview {
+//    EditorView(viewModel: EditorViewModel())
+//}
 
 /*
  Category: Geography
