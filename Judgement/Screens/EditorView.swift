@@ -12,25 +12,28 @@ struct EditorView: View {
     @EnvironmentObject var appCoordinator: AppCoordinator
     @ObservedObject var viewModel: EditorViewModel
     
-    @State var wiki: [ChoiceItem]
+    @ObservedObject var appData = AppData.shared
     
     @State var newItem: ChoiceItem = ChoiceItem()
     
     var body: some View {
         VStack {
-            if(viewModel.loading){
+            if(appData.loading){
                 ProgressView().opacity(1)
             }
-            else if(viewModel.items.isEmpty) {
-                Text("No items \(viewModel.items.count)")
+            else if(appData.items.isEmpty) {
+                Text("No items")
             }
             else {
                 List {
-                    ForEach($wiki) { $item in
+                    ForEach(appData.items) { item in
                         Button(action: {
-                            appCoordinator.push(.detail(item: $item))
+                            appCoordinator.push(.detail(item: item))
                         }) {
                             Text("\(item.question)")
+                            .onChange(of: item.question) { oldValue, newValue in
+                                print("Item changed to: \(newValue)")
+                            }
                         }
                     }
                     .onDelete(perform: deleteItems)
@@ -45,35 +48,28 @@ struct EditorView: View {
             }
         }
         .onAppear {
-            viewModel.loadQuestions()
         }
 //        .onChange(of: scenePhase) { newPhase in
 //            if newPhase == .active {
 //                loadItems()
 //            }
 //        }
-//        .onChange(of: appCoordinator.path) { oldValue, newValue in
-//            
-//        }
-        .alert("Alert Title", isPresented: $viewModel.showAlert) {
+        .alert("Alert Title", isPresented: $appData.showAlert) {
             Button("OK", role: .cancel) { }
         } message: {
-            Text(viewModel.alertMessage)
+            Text(appData.alertMessage)
         }
     }
 
     private func addItem() {
-        withAnimation {
-            let newItem = ChoiceItem(question: "question", choiceA: "choice A", choiceB: "choice B", explanation: "explanation", category: "category")
-            CloudKitHelper.instance.saveNewItem(item: newItem)
-            appCoordinator.push(.detail(item: $newItem))
-        }
+        newItem = appData.addItem()
+        appCoordinator.push(.detail(item: newItem))
     }
 
     private func deleteItems(offsets: IndexSet) {
         withAnimation {
             for index in offsets {
-                viewModel.deleteItem(viewModel.items[index])
+                appData.deleteItem(appData.items[index])
             }
         }
     }

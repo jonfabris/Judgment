@@ -13,7 +13,7 @@ import SwiftUI
 enum Screen: Identifiable, Hashable {
     case intro
     case editor
-    case detail(item: Binding<ChoiceItem>)
+    case detail(item: ChoiceItem) //Binding<ChoiceItem>)
     case introPlay
     case play(speed: Float)
 
@@ -66,16 +66,16 @@ struct CoordinatorView: View {
 }
 
 class AppCoordinator: ObservableObject {
-//    @State var wiki: Wiki = Wiki()
-    @Published var choices: [ChoiceItem] = [ChoiceItem(question: "question", choiceA: "choice A", choiceB: "choice B", explanation: "explanation", category: "category")]
-    
     @Published var path: NavigationPath = NavigationPath()
+    var screenStack: [Screen] = []
     
     lazy var editorViewModel = EditorViewModel()
     lazy var introViewModel = IntroViewModel()
     lazy var startPlayViewModel = StartPlayViewModel()
     
-    var screenStack: [Screen] = []
+    init() {
+        AppData.shared.loadQuestions()
+    }
 
     func push(_ screen: Screen) {
         path.append(screen)
@@ -98,7 +98,7 @@ class AppCoordinator: ObservableObject {
         case .intro:
             IntroView(viewModel: introViewModel)
         case .editor:
-            EditorView(viewModel: editorViewModel, wiki: choices)
+            EditorView(viewModel: self.editorViewModel)
         case .detail(let item):
             EditItemView(item: item)
         case .introPlay:

@@ -9,10 +9,8 @@ import SwiftUI
 
 struct EditItemView: View {
     @EnvironmentObject var appCoordinator: AppCoordinator
-//    @ObservedObject var item: ChoiceItem
-    @Binding var item: ChoiceItem
-//    @Binding var needsRefresh: Bool
-    @ObservedObject var viewModel: EditItemViewModel = EditItemViewModel()
+    @ObservedObject var item: ChoiceItem
+    @ObservedObject var appData = AppData.shared
         
     var body: some View {
         VStack {
@@ -33,8 +31,7 @@ struct EditItemView: View {
                 .withDefaultTextEditStyle()
                 .frame(height: 38)
             Button(action: {
-//                needsRefresh = true
-                viewModel.save(item: item)
+                appData.save(item: item)
                 appCoordinator.pop()
             }) {
                 Text("Save")
