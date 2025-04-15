@@ -13,7 +13,7 @@ import SwiftUI
 enum Screen: Identifiable, Hashable {
     case intro
     case editor
-    case detail(item: Binding<ChoiceItem>) // needsRefresh: Binding<Bool>)
+    case detail(item: Binding<ChoiceItem>)
     case introPlay
     case play(speed: Float)
 
@@ -67,10 +67,9 @@ struct CoordinatorView: View {
 
 class AppCoordinator: ObservableObject {
 //    @State var wiki: Wiki = Wiki()
-    @State var choices: [ChoiceItem] = [ChoiceItem(question: "question", choiceA: "choice A", choiceB: "choice B", explanation: "explanation", category: "category")]
+    @Published var choices: [ChoiceItem] = [ChoiceItem(question: "question", choiceA: "choice A", choiceB: "choice B", explanation: "explanation", category: "category")]
     
     @Published var path: NavigationPath = NavigationPath()
-//    @Environment(\.modelContext) private var modelContext
     
     lazy var editorViewModel = EditorViewModel()
     lazy var introViewModel = IntroViewModel()
@@ -99,7 +98,7 @@ class AppCoordinator: ObservableObject {
         case .intro:
             IntroView(viewModel: introViewModel)
         case .editor:
-            EditorView(viewModel: editorViewModel, wiki: $choices)
+            EditorView(viewModel: editorViewModel, wiki: choices)
         case .detail(let item):
             EditItemView(item: item)
         case .introPlay:

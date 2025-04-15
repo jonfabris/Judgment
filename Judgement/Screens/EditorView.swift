@@ -12,7 +12,7 @@ struct EditorView: View {
     @EnvironmentObject var appCoordinator: AppCoordinator
     @ObservedObject var viewModel: EditorViewModel
     
-    @Binding var wiki: [ChoiceItem]
+    @State var wiki: [ChoiceItem]
     
     @State var newItem: ChoiceItem = ChoiceItem()
     
