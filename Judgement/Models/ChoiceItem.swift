@@ -22,17 +22,6 @@ class ChoiceItem: CustomCloudKitCodable, Hashable, Identifiable, ObservableObjec
     var category: String = ""
     var cloudKitIdentifier: String?
     var difficulty: Int = 5 // int from 1 to 10
-    
-    enum CodingKeys: String, CodingKey {
-        case cloudKitSystemFields
-        case question
-        case correct
-        case incorrect
-        case explanation
-        case category
-        case cloudKitIdentifier
-        case difficulty
-    }
 
     // MARK: - Init
     init() {}
@@ -46,41 +35,13 @@ class ChoiceItem: CustomCloudKitCodable, Hashable, Identifiable, ObservableObjec
         self.difficulty = difficulty
     }
     
-    required init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.cloudKitSystemFields = try container.decodeIfPresent(Data.self, forKey: .cloudKitSystemFields)
-        self.question = try container.decode(String.self, forKey: .question)
-        self.correct = try container.decode(String.self, forKey: .correct)
-        self.incorrect = try container.decode(String.self, forKey: .incorrect)
-        self.explanation = try container.decode(String.self, forKey: .explanation)
-        self.category = try container.decode(String.self, forKey: .category)
-        self.cloudKitIdentifier = try container.decodeIfPresent(String.self, forKey: .cloudKitIdentifier)
-        self.difficulty = try container.decode(Int.self, forKey: .difficulty)
+    // MARK: - Hashable
+    static func == (lhs: ChoiceItem, rhs: ChoiceItem) -> Bool {
+        lhs.id == rhs.id
     }
 
-    func encode(to encoder: Encoder) throws {
-        var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encodeIfPresent(cloudKitSystemFields, forKey: .cloudKitSystemFields)
-        try container.encode(question, forKey: .question)
-        try container.encode(correct, forKey: .correct)
-        try container.encode(incorrect, forKey: .incorrect)
-        try container.encode(explanation, forKey: .explanation)
-        try container.encode(category, forKey: .category)
-        try container.encodeIfPresent(cloudKitIdentifier, forKey: .cloudKitIdentifier)
-        try container.encode(difficulty, forKey: .difficulty)
-    }
-    // Conform to Hashable: Implement '==' to check equality between instances
-    static func == (lhs: ChoiceItem, rhs: ChoiceItem) -> Bool {
-        return lhs.question == rhs.question
-    }
-    
-    // Conform to Hashable: Implement 'hash(into:)' to create hash value
     func hash(into hasher: inout Hasher) {
-        hasher.combine(question)
-        hasher.combine(correct)
-        hasher.combine(incorrect)
-        hasher.combine(explanation)
-        hasher.combine(category)
+        hasher.combine(id)
     }
 }
 

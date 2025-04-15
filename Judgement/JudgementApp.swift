@@ -10,6 +10,10 @@ import SwiftData
 
 @main
 struct JudgementApp: App {
+    init() {
+        
+    }
+    
     // SwiftData can only access private database
 //    var sharedModelContainer: ModelContainer = {
 //        let schema = Schema([

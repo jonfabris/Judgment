@@ -22,6 +22,9 @@ class IntroViewModel: ObservableObject {
     func setup() {
         Task {
             await checkCloudKitStatus()
+            if !showAlert {
+                AppData.shared.loadQuestions()
+            }
         }
     }
     
