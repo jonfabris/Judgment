@@ -20,9 +20,10 @@ class AppData: ObservableObject {
     private init() {}
     
     func loadQuestions() {
-        loading = true
+        
         print("LoadQuestions\n\n")
         Task { @MainActor in
+            loading = true
             do {
                 items = try await CloudKitHelper.instance.fetchItems()
                 loading = false
@@ -47,17 +48,23 @@ class AppData: ObservableObject {
         }
     }
     
-    @MainActor func addItem() -> ChoiceItem {
-        let newItem = ChoiceItem(question: "question", choiceA: "choice A", choiceB: "choice B", explanation: "explanation", category: "category")
-        CloudKitHelper.instance.saveNewItem(item: newItem)
-        items.append(newItem)
+    func addItem() -> ChoiceItem {
+        let newItem = ChoiceItem(question: "question", correct: "correct", incorrect: "incorrect", explanation: "explanation", category: "category")
         return newItem
     }
     
-    // save item already in database
+    // save item, if item is not in database it creates a new record
     func save(item: ChoiceItem) {
         Task { @MainActor in
-            try await CloudKitHelper.instance.saveRecord(item)
+            try await CloudKitHelper.instance.saveOrUpdate(item)
+            appendIfNew(item)
         }
     }
+    
+    func appendIfNew(_ item: ChoiceItem) {
+        if !items.contains(where: { $0.getRecordId() == item.getRecordId() }) {
+            items.append(item)
+        }
+    }
+
 }

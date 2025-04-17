@@ -11,7 +11,6 @@ import SwiftData
 @main
 struct JudgementApp: App {
     init() {
-        
     }
     
     // SwiftData can only access private database
@@ -28,14 +27,6 @@ struct JudgementApp: App {
 //        }
 //    }()
 
-//    var body: some Scene {
-//        WindowGroup {
-//            CoordinatorView()
-//        }
-////        .modelContainer(sharedModelContainer)
-//    }
-    
-    
         var body: some Scene {
             WindowGroup {
                 CoordinatorView()

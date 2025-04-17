@@ -12,7 +12,7 @@ import CloudKitCodable
 
 
 //@Model - only needed for SwiftData
-class ChoiceItem: CustomCloudKitCodable, Hashable, Identifiable, ObservableObject {
+class ChoiceItem: CustomCloudKitCodable, Hashable, Identifiable, Equatable, ObservableObject {
     var id: UUID = UUID()
     var cloudKitSystemFields: Data?
     var question: String = ""
@@ -26,22 +26,58 @@ class ChoiceItem: CustomCloudKitCodable, Hashable, Identifiable, ObservableObjec
     // MARK: - Init
     init() {}
     
-    init(question: String, choiceA: String, choiceB: String, explanation: String, category: String, difficulty: Int = 5) {
+    init(question: String, correct: String, incorrect: String, explanation: String, category: String, difficulty: Int = 5) {
         self.question = question
-        self.correct = choiceA
-        self.incorrect = choiceB
+        self.correct = correct
+        self.incorrect = incorrect
         self.explanation = explanation
         self.category = category
         self.difficulty = difficulty
     }
     
-    // MARK: - Hashable
+
     static func == (lhs: ChoiceItem, rhs: ChoiceItem) -> Bool {
-        lhs.id == rhs.id
+        let equal = lhs.question == rhs.question &&
+               lhs.correct == rhs.correct &&
+               lhs.incorrect == rhs.incorrect &&
+               lhs.explanation == rhs.explanation &&
+               lhs.category == rhs.category &&
+               lhs.difficulty == rhs.difficulty
+        print(equal)
+        return equal
     }
 
     func hash(into hasher: inout Hasher) {
         hasher.combine(id)
+    }
+    
+    func getRecordId() -> CKRecord.ID? {
+        let record: CKRecord? = self.toCKRecord()
+        return record?.recordID
+    }
+    
+    func copy() -> ChoiceItem {
+        let newItem = ChoiceItem(
+            question: self.question,
+            correct: self.correct,
+            incorrect: self.incorrect,
+            explanation: self.explanation,
+            category: self.category,
+            difficulty: self.difficulty
+        )
+        newItem.cloudKitSystemFields = self.cloudKitSystemFields
+        
+        return newItem
+    }
+    
+    func copy(_ item: ChoiceItem) {
+        self.question = item.question
+        self.correct = item.correct
+        self.incorrect = item.incorrect
+        self.explanation = item.explanation
+        self.category = item.category
+        self.difficulty = item.difficulty
+        self.cloudKitSystemFields = item.cloudKitSystemFields
     }
 }
 

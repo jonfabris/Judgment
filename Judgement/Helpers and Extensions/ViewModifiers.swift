@@ -10,7 +10,6 @@ import SwiftUI
 struct DefaultTextEditStyle: ViewModifier {
     func body(content: Content) -> some View {
         content
-//            .frame(minHeight: 80)÷
             .padding(0)
             .overlay(RoundedRectangle(cornerRadius: 8)
                 .stroke(Color.gray, lineWidth: 1))

@@ -15,10 +15,7 @@ class IntroViewModel: ObservableObject {
     var userId: CKRecord.ID?
     @Published var alertMessage = ""
     @Published var showAlert = false
-    
-    init() {
-    }
-    
+
     func setup() {
         Task {
             await checkCloudKitStatus()
