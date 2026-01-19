@@ -10,8 +10,30 @@ import Combine
 
 class EditorViewModel: ObservableObject
 {
+    @Published var items: [ChoiceItem] = []
+    @Published var loading: Bool = false
+    @Published var showAlert: Bool = false
+    @Published var alertMessage: String = ""
+    
     init() {
-    }
 
+    }
+    
+    @MainActor func loadQuestions() {
+        loading = true
+        print("LoadQuestions\n\n")
+        Task { @MainActor in
+            do {
+                items = try await CloudKitHelper.instance.fetchItems()
+                print(items)
+            } catch {
+                showAlert = true
+                alertMessage = error.localizedDescription
+            }
+            loading = false
+        }
+    }
 }
+
+
 

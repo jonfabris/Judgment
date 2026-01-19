@@ -11,36 +11,31 @@ import SwiftData
 struct EditorView: View {
     @EnvironmentObject var appCoordinator: AppCoordinator
     @ObservedObject var viewModel: EditorViewModel
-    
-    @ObservedObject var appData = AppData.shared
-    
-    @State var newItem: ChoiceItem = ChoiceItem()
-    
+    @State private var refreshID = UUID()
+    @State private var needsRefresh = false
+        
     var body: some View {
         VStack {
-            if(appData.loading){
-                ProgressView().opacity(1)
-            }
-            else if(appData.items.isEmpty) {
+            if(viewModel.items.isEmpty && !viewModel.loading) {
                 Text("No items")
             }
-            else {
-                List {
-                    ForEach(appData.items) { item in
-                        Button(action: {
-                            appCoordinator.push(.detail(item: item))
-                        }) {
-                            Text("\(item.question)")
-                            .onChange(of: item.question) { oldValue, newValue in
-                                print("Item changed to: \(newValue)")
-                            }
-                        }
+            ProgressView().opacity(viewModel.loading ? 1 : 0)
+            List {
+                ForEach($viewModel.items) { $item in
+                    Button(action: {
+                        appCoordinator.push(.detail(item: $item))
+                    }) {
+                        Text("\(item.question)")
                     }
-                    .onDelete(perform: deleteItems)
                 }
+                .onDelete(perform: deleteItems)
             }
+            
         }
         .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                EditButton()
+            }
             ToolbarItem {
                 Button(action: addItem) {
                     Label("Add Item", systemImage: "plus")
@@ -48,37 +43,39 @@ struct EditorView: View {
             }
         }
         .onAppear {
+            viewModel.loadQuestions()
         }
-//        .onChange(of: scenePhase) { newPhase in
-//            if newPhase == .active {
-//                loadItems()
-//            }
-//        }
-        .alert("Alert Title", isPresented: $appData.showAlert) {
+        .onChange(of: appCoordinator.path) { oldValue, newValue in
+            
+        }
+        .alert("Alert Title", isPresented: $viewModel.showAlert) {
             Button("OK", role: .cancel) { }
         } message: {
-            Text(appData.alertMessage)
+            Text(viewModel.alertMessage)
         }
     }
 
     private func addItem() {
-        newItem = appData.addItem()
-        appCoordinator.push(.detail(item: newItem))
+//        withAnimation {
+//            let newItem = ChoiceItem(question: "question", choiceA: "choice A", choiceB: "choice B", explanation: "explanation", category: "category")
+//            CloudKitHelper.instance.saveNewItem(item: newItem)
+//            appCoordinator.push(.detail(item: $newItem))
+//        }
     }
 
     private func deleteItems(offsets: IndexSet) {
         withAnimation {
             for index in offsets {
-                appData.deleteItem(appData.items[index])
+//                modelContext.delete(items[index])
             }
         }
     }
 
 }
 
-//#Preview {
-//    EditorView(viewModel: EditorViewModel())
-//}
+#Preview {
+    EditorView(viewModel: EditorViewModel())
+}
 
 /*
  Category: Geography
